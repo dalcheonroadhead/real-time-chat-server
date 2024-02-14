@@ -1,15 +1,20 @@
 package com.oauth2.practices3.StompChatting.Config;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
+import org.springframework.web.socket.server.standard.ServletServerContainerFactoryBean;
 
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSocketMessageBroker
+@Slf4j
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     // 1) Socket이 열릴 주소를 정한다.
@@ -21,6 +26,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .withSockJS();
     }
 
+    @Override
     // 2) 구독 요청과 발행 요청을 구분하는 접두사를 설정
     public void configureMessageBroker(MessageBrokerRegistry registry){
 
@@ -36,4 +42,21 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.setApplicationDestinationPrefixes("/pub");
 
     }
+
+    // 3) 메세지 크기 제한 오류 방지(이 코드가 없으면 base64로 보낼때 소켓 연결이 끊길 수 있음)
+    @Override
+    public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
+        registration.setMessageSizeLimit(1024*1024*1024);
+    }
+
+    @Bean
+    public ServletServerContainerFactoryBean createServletServerContainerFactoryBean() {
+        ServletServerContainerFactoryBean container = new ServletServerContainerFactoryBean();
+        container.setMaxTextMessageBufferSize(Integer.MAX_VALUE);
+        container.setMaxBinaryMessageBufferSize(Integer.MAX_VALUE);
+        log.info("Websocket factory returned");
+        return container;
+    }
+
+
 }

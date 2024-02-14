@@ -24,19 +24,24 @@ public class ChatMessageDto {
     // 4) 해당 메세지가 오고간 채팅방 번호
     private long chatRoomId;
 
+    // 5) Base64로 이미지를 받음
+    private String imgCode;
+
     @Builder
-    private ChatMessageDto(String messageType, String content, long userId, long chatRoomId){
+    private ChatMessageDto(String messageType, String content, long userId, long chatRoomId, String imgCode){
         this.messageType = messageType;
         this.content = content;
         this.userId = userId;
         this.chatRoomId = chatRoomId;
+        this.imgCode = imgCode;
     }
 
-    public static ChatMessageDto of(String messageType, String content, long userId, long chatRoomId) {
+    public static ChatMessageDto of(String messageType, String content, long userId, long chatRoomId, String imgCode) {
         return  builder().messageType(messageType)
                 .content(content)
                 .userId(userId)
                 .chatRoomId(chatRoomId)
+                .imgCode(imgCode)
                 .build();
     }
 

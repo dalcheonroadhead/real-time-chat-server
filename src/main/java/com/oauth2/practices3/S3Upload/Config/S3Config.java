@@ -11,12 +11,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class S3Config {
 
-    private final String accessKey = "본인의 키를 집어넣으세요";
+    private final String accessKey = "본인 키를 집어 넣으세요";
 
-    private final String secretKey = "본인의 키를 집어넣으세요";
+    private final String secretKey = "본인 키를 집어 넣으세요";
 
 
-    private final String region ="본인의 지역을 집어넣으세요";
+    private final String region ="본인 지역을 집어넣으세요";
 
     // 1) 필요한 값들을 application.yml로부터 받아서 AmazonS3Client를 만드는 작업
     @Bean
